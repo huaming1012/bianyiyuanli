@@ -1,18 +1,20 @@
 %{
 #include <stdio.h>
+#include "test.h"
 #include <stdlib.h>
 #include <string.h>
-typedef struct TreeNode{
-    int id;
-    int type;
-    int length;
-    struct TreeNode* child;
-    struct TreeNode* brother;
-    char* name;
-}TreeNode, *Tree;
+// typedef struct TreeNode{
+//     int id;
+//     int type;
+//     int length;
+//     struct TreeNode* child;
+//     struct TreeNode* brother;
+//     char* name;
+// }TreeNode, *Tree;
 #define YYSTYPE TreeNode*
 #include "y.tab.h"
-extern TreeNode* TreeNode2(int type);
+//extern TreeNode::TreeNode(int lineno, NodeType type);
+
 
 int num_lines = 1;
 int num_cols = 1;
@@ -56,19 +58,35 @@ NOTE_S \/\/(.)*\n
 "signed" {return SIGNED;}
 "unsigned" {return UNSIGNED;}
 "default" {return DEFAULT;}
+"printf" {
+    nodePrintf->var_name = "printf";
+    nodePrintf->var_scope = "1";
+    yylval = nodePrintf;
+    return IDENT;
+}
+"scanf" {
+    nodeScanf->var_name = "scanf";
+    nodeScanf->var_scope = "1";
+    yylval = nodeScanf;
+    return IDENT;
+}
 {NOTE_S}*   {++num_lines;num_cols = 1;}
 {commentbegin} {num_cols += yyleng; BEGIN COMMENT;}
 <COMMENT>. {num_cols += yyleng;}
 <COMMENT>\n {++num_lines; num_cols = 1;}
 <COMMENT>{commentend} {num_cols += yyleng; BEGIN INITIAL;}
-{IDENTIFIER} {TreeNode* node = TreeNode2(1);
-strcpy(node->name, yytext);
-yylval = node;
-return IDENT;}
-{INTCONST}  {TreeNode* node = TreeNode2(1);
-strcpy(node->name, yytext);
-yylval = node;
-return INTCONST;}
+{IDENTIFIER} {TreeNode* node = new TreeNode(num_lines, NODE_VAR);
+    node->var_name = string(yytext);
+    yylval = node;
+    return IDENT;
+}
+{INTCONST}  {TreeNode* node = new TreeNode(num_lines, NODE_CONST);
+    node->type = TYPE_INT;
+    node->type->constvar = true;
+    node->int_val = strtol(yytext, NULL, 10);
+    yylval = node;
+    return INTCONST;
+}
 "+" {return PLUS;}
 "-" {return MINUS;}
 "*" {return TIMES;}
