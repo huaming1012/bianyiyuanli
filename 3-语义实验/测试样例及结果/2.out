@@ -1,0 +1,348 @@
+	.text
+	.data
+	.align	4
+	.globl	N
+	.type	N, @object
+	.size	N, 4
+N:
+	.long	3
+	.globl	a
+	.type	a, @object
+	.size	a, 72
+a:
+	.zero	18
+	.section	.rodata
+.LC1:
+	.string	"%d\n"
+.LC0:
+	.string	"%d"
+	.text
+	.globl	f
+	.type	f, @function
+f:
+	pushq	%rbp
+	movl	%rsp, %rbp
+	subq	$16, %rsp
+.L0:
+	movl	8(%rbp), %rax
+	pushq	%rax
+	movl	$1, %rax
+	popq	%rbx
+	cmpq	%rax, %rbx
+	sete	%al
+	je		.L1
+	jmp		.L2
+.L1:
+	movl	$1, %rax
+	jmp		.LRET_f
+.L2:
+	movl	$1, %rax
+	movl	%rax, -12(%rbp)
+	movl	8(%rbp), %rax
+	pushq	%rax
+	movl	8(%rbp), %rax
+	pushq	%rax
+	movl	$1, %rax
+	movl	%rax, %rbx
+	popq	%rax
+	subq	%rbx, %rax
+	pushq	%rax
+	call	f
+	addq	$4, %rsp
+	popq	%rbx
+	imulq	%rbx, %rax
+	movl	%rax, -12(%rbp)
+	movl	-12(%rbp), %rax
+	jmp		.LRET_f
+.LRET_f:
+	addq	$16, %rsp
+	popq	%ebp
+	ret
+	.globl	main
+	.type	main, @function
+main:
+	pushq	%rbp
+	movl	%rsp, %rbp
+	subq	$100, %rsp
+	movl	$10, %rax
+	pushq	%rax
+	call	f
+	addq	$4, %rsp
+	movl	%rax, -12(%rbp)
+.L3:
+	movl	-12(%rbp), %rax
+	pushq	%rax
+	movl	$3628800, %rax
+	popq	%rbx
+	cmpq	%rax, %rbx
+	setne	%al
+	jne		.L4
+	jmp		.L7
+	pushq	%rax
+.L7:
+	movl	-12(%rbp), %rax
+	popq	%rbx
+	orq	%rax, %rbx
+	setne	%al
+.L4:
+	leaq	$2333, %rsi
+	leaq	.LC1(%rip), %rdi
+	call	printf@PLT
+.L8:
+	movl	-12(%rbp), %rax
+	orq	%rax, $0
+	sete	%al
+.L9:
+	movl	-12(%rbp), %rax
+	pushq	%rax
+	movl	$10, %rax
+	movl	%rax, %rbx
+	popq	%rax
+	subq	%rbx, %rax
+	movl	%rax, -12(%rbp)
+	jmp		.L11
+.L10:
+	movl	-12(%rbp), %rax
+	pushq	%rax
+	movl	$10, %rax
+	popq	%rbx
+	addq	%rbx, %rax
+	movl	%rax, -12(%rbp)
+.L11:
+	jmp		.L6
+.L5:
+	movl	-12(%rbp), %rax
+	leaq	%rax, %rsi
+	leaq	.LC1(%rip), %rdi
+	call	printf@PLT
+.L6:
+	movl	-12(%rbp), %rax
+	leaq	%rax, %rsi
+	leaq	.LC1(%rip), %rdi
+	call	printf@PLT
+	movl	$0, %rax
+	movl	%rax, -16(%rbp)
+	movl	$0, %rax
+	movl	%rax, -20(%rbp)
+.L12:
+	movl	-16(%rbp), %rax
+	pushq	%rax
+	movl	N, %rax
+	popq	%rbx
+	cmpq	%rax, %rbx
+	setle	%al
+	jle		.L13
+	jmp		.L14
+.L13:
+.L15:
+	movl	-16(%rbp), %rax
+	pushq	%rax
+	movl	$1, %rax
+	popq	%rbx
+	cmpq	%rax, %rbx
+	sete	%al
+	je		.L16
+	jmp		.L17
+.L16:
+	movl	-16(%rbp), %rax
+	pushq	%rax
+	movl	$1, %rax
+	popq	%rbx
+	addq	%rbx, %rax
+	movl	%rax, -16(%rbp)
+	jmp		.L12
+.L17:
+.L18:
+	movl	-16(%rbp), %rax
+	pushq	%rax
+	movl	N, %rax
+	popq	%rbx
+	cmpq	%rax, %rbx
+	sete	%al
+	je		.L19
+	jmp		.L20
+.L19:
+	jmp		.L14
+.L20:
+	movl	-16(%rbp), %rax
+	leaq	%rax, %rsi
+	leaq	.LC1(%rip), %rdi
+	call	printf@PLT
+	movl	-16(%rbp), %rax
+	pushq	%rax
+	movl	$1, %rax
+	popq	%rbx
+	addq	%rbx, %rax
+	movl	%rax, -16(%rbp)
+	jmp		.L12
+.L14:
+	movl	$1, %rax
+	movl	%rax, -16(%rbp)
+	movl	-16(%rbp), %rax
+	pushq	%rax
+	movl	-16(%rbp), %rax
+	popq	%rbx
+	addq	%rbx, %rax
+	movl	%rax, -20(%rbp)
+	movl	-16(%rbp), %rax
+	pushq	%rax
+	movl	-20(%rbp), %rax
+	pushq	%rax
+	movl	$2, %rax
+	popq	%rbx
+	imulq	%rbx, %rax
+	popq	%rbx
+	addq	%rbx, %rax
+	pushq	%rax
+	movl	$0, %rax
+	pushq	%rax
+	movl	$6, %rax
+	popq	%rbx
+	imulq	%rbx, %rax
+	pushq	%rax
+	movl	$0, %rax
+	popq	%rbx
+	addq	%rbx, %rax
+	popq	%rbx
+	movl	%rbx, -24(%rbp,%rax,4)
+	movl	$3, %rax
+	pushq	%rax
+	movl	-16(%rbp), %rax
+	pushq	%rax
+	movl	$6, %rax
+	popq	%rbx
+	imulq	%rbx, %rax
+	pushq	%rax
+	movl	-20(%rbp), %rax
+	popq	%rbx
+	addq	%rbx, %rax
+	popq	%rbx
+	movl	%rbx, -24(%rbp,%rax,4)
+	movl	$0, %rax
+	pushq	%rax
+	movl	$6, %rax
+	popq	%rbx
+	imulq	%rbx, %rax
+	pushq	%rax
+	movl	$0, %rax
+	popq	%rbx
+	addq	%rbx, %rax
+	movl	-24(%rbp,%rax,4), %rax
+	leaq	%rax, %rsi
+	leaq	.LC1(%rip), %rdi
+	call	printf@PLT
+	movl	-16(%rbp), %rax
+	pushq	%rax
+	movl	$6, %rax
+	popq	%rbx
+	imulq	%rbx, %rax
+	pushq	%rax
+	movl	-20(%rbp), %rax
+	popq	%rbx
+	addq	%rbx, %rax
+	movl	-24(%rbp,%rax,4), %rax
+	leaq	%rax, %rsi
+	leaq	.LC1(%rip), %rdi
+	call	printf@PLT
+	movl	-16(%rbp), %rax
+	pushq	%rax
+	movl	$6, %rax
+	popq	%rbx
+	imulq	%rbx, %rax
+	pushq	%rax
+	movl	-20(%rbp), %rax
+	popq	%rbx
+	addq	%rbx, %rax
+	movl	-24(%rbp,%rax,4), %rax
+	pushq	%rax
+	movl	$0, %rax
+	pushq	%rax
+	movl	$6, %rax
+	popq	%rbx
+	imulq	%rbx, %rax
+	pushq	%rax
+	movl	$0, %rax
+	popq	%rbx
+	addq	%rbx, %rax
+	movl	-24(%rbp,%rax,4), %rax
+	popq	%rbx
+	addq	%rbx, %rax
+	movl	%rax, -96(%rbp)
+	movl	-96(%rbp), %rax
+	leaq	%rax, %rsi
+	leaq	.LC1(%rip), %rdi
+	call	printf@PLT
+	movl	$5, %rax
+	pushq	%rax
+	movl	$0, %rax
+	pushq	%rax
+	movl	$6, %rax
+	popq	%rbx
+	imulq	%rbx, %rax
+	pushq	%rax
+	movl	$0, %rax
+	popq	%rbx
+	addq	%rbx, %rax
+	popq	%rbx
+	movl	%rbx, a(,%rax,4)
+	movl	$2, %rax
+	pushq	%rax
+	movl	$1, %rax
+	pushq	%rax
+	movl	$6, %rax
+	popq	%rbx
+	imulq	%rbx, %rax
+	pushq	%rax
+	movl	$1, %rax
+	popq	%rbx
+	addq	%rbx, %rax
+	popq	%rbx
+	movl	%rbx, a(,%rax,4)
+	movl	$0, %rax
+	pushq	%rax
+	movl	$6, %rax
+	popq	%rbx
+	imulq	%rbx, %rax
+	pushq	%rax
+	movl	$0, %rax
+	popq	%rbx
+	addq	%rbx, %rax
+	movl	a(,%rax,4), %rax
+	leaq	%rax, %rsi
+	leaq	.LC1(%rip), %rdi
+	call	printf@PLT
+	movl	$1, %rax
+	pushq	%rax
+	movl	$6, %rax
+	popq	%rbx
+	imulq	%rbx, %rax
+	pushq	%rax
+	movl	$1, %rax
+	popq	%rbx
+	addq	%rbx, %rax
+	movl	a(,%rax,4), %rax
+	leaq	%rax, %rsi
+	leaq	.LC1(%rip), %rdi
+	call	printf@PLT
+	leaq	a(,%rax,4)%rsi
+	leaq	.LC0(%rip), %rdi
+	call	__isoc99_scanf@PLT
+	movl	$1, %rax
+	pushq	%rax
+	movl	$6, %rax
+	popq	%rbx
+	imulq	%rbx, %rax
+	pushq	%rax
+	movl	$1, %rax
+	popq	%rbx
+	addq	%rbx, %rax
+	movl	a(,%rax,4), %rax
+	leaq	%rax, %rsi
+	leaq	.LC1(%rip), %rdi
+	call	printf@PLT
+	movl	$0, %rax
+	jmp		.LRET_main
+.LRET_main:
+	addq	$100, %rsp
+	popq	%ebp
+	ret
